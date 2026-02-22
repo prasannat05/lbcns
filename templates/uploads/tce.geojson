@@ -1,0 +1,253 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "research"
+      },
+      "geometry": {
+        "coordinates": [
+          78.08070349111722,
+          9.88273149775766
+        ],
+        "type": "Point"
+      },
+      "id": 0
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "parking"
+      },
+      "geometry": {
+        "coordinates": [
+          78.08072226658032,
+          9.883146355549869
+        ],
+        "type": "Point"
+      },
+      "id": 1
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "library"
+      },
+      "geometry": {
+        "coordinates": [
+          78.08134453907155,
+          9.883201846042994
+        ],
+        "type": "Point"
+      },
+      "id": 2
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "j1"
+      },
+      "geometry": {
+        "coordinates": [
+          78.08180051460408,
+          9.883199203638029
+        ],
+        "type": "Point"
+      },
+      "id": 3
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "eee"
+      },
+      "geometry": {
+        "coordinates": [
+          78.08177905693248,
+          9.882517462641815
+        ],
+        "type": "Point"
+      },
+      "id": 4
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "research-parking"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            78.08070349111722,
+            9.88273149775766
+          ],
+          [
+            78.08072226658032,
+            9.883146355549869
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": 9
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "library-j1"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            78.08134453907155,
+            9.883201846042994
+          ],
+          [
+            78.08180051460408,
+            9.883199203638029
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "j1-eee"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            78.08180051460408,
+            9.883199203638029
+          ],
+          [
+            78.08177905693248,
+            9.882517462641815
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "j0"
+      },
+      "geometry": {
+        "coordinates": [
+          78.08073000794911,
+          9.883207135946037
+        ],
+        "type": "Point"
+      },
+      "id": 8
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "parking-j0"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            78.08072226658032,
+            9.883146355549869
+          ],
+          [
+            78.08073000794911,
+            9.883207135946037
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "j0-library"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            78.08073000794911,
+            9.883207135946037
+          ],
+          [
+            78.08134453907155,
+            9.883201846042994
+          ]
+        ],
+        "type": "LineString"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "j2"
+      },
+      "geometry": {
+        "coordinates": [
+          78.08252457954075,
+          9.883163565964622
+        ],
+        "type": "Point"
+      },
+      "id": 11
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "j1-j2"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            78.08180051460408,
+            9.883199203638029
+          ],
+          [
+            78.08252457954075,
+            9.883163565964622
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": 12
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "ece"
+      },
+      "geometry": {
+        "coordinates": [
+          78.08254824415036,
+          9.882879565976609
+        ],
+        "type": "Point"
+      },
+      "id": 13
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "j2-ece"
+      },
+      "geometry": {
+        "coordinates": [
+          [
+            78.08252457954075,
+          9.883163565964622
+          ],
+          [
+            78.08254824415036,
+          9.882879565976609
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": 14
+    }
+  ]
+}
