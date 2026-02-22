@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Navigator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #0a0e27;
+            color: #e4e8f0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background particles */
+        .bg-particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.3), transparent);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .particle:nth-child(1) { width: 300px; height: 300px; top: 10%; left: 5%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 200px; height: 200px; top: 60%; right: 10%; animation-delay: 3s; }
+        .particle:nth-child(3) { width: 250px; height: 250px; bottom: 15%; left: 30%; animation-delay: 6s; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+            33% { transform: translate(50px, -80px) scale(1.1); opacity: 0.5; }
+            66% { transform: translate(-30px, 60px) scale(0.9); opacity: 0.4; }
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        /* Header with stagger animation */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            opacity: 0;
+            animation: slideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .logo-wrapper {
+            display: inline-block;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .logo-bg {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.4);
+            position: relative;
+            transform: rotate(-3deg);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .logo-bg::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+            border-radius: 26px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .logo-wrapper:hover .logo-bg {
+            transform: rotate(0deg) scale(1.05);
+        }
+
+        .logo-wrapper:hover .logo-bg::before {
+            opacity: 1;
+            animation: rotate-gradient 3s linear infinite;
+        }
+
+        @keyframes rotate-gradient {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .logo {
+            font-size: 40px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #ffffff, #c7d2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Card with entrance animation */
+        .card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 28px;
+            padding: 48px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            animation: cardEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Form elements with smooth interactions */
+        .form-group {
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #cbd5e1;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 18px 24px;
+            background: rgba(30, 41, 59, 0.5);
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            border-radius: 16px;
+            color: #e4e8f0;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
+        }
+
+        .form-input:focus, .form-select:focus {
+            border-color: #6366f1;
+            background: rgba(30, 41, 59, 0.8);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-select option {
+            background: #1e293b;
+            color: #e4e8f0;
+        }
+
+        /* File upload zone */
+        .file-zone {
+            border: 2px dashed rgba(99, 102, 241, 0.4);
+            border-radius: 20px;
+            padding: 48px 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 23, 42, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-zone::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+
+        .file-zone:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .file-zone:hover {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .file-zone.dragover {
+            border-color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.1);
+            transform: scale(1.02);
+        }
+
+        .file-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .file-text {
+            font-size: 15px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .file-name {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-top: 16px;
+            font-size: 14px;
+            color: #c7d2fe;
+            display: none;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Buttons with magnetic effect */
+        .btn {
+            width: 100%;
+            padding: 20px 32px;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Route summary with slide-in */
+        .route-summary {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.15));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            padding: 32px;
+            margin: 32px 0 0;
+            text-align: center;
+            display: none;
+            transform: translateX(-100%);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .route-summary.show {
+            display: block;
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .route-summary h3 {
+            font-size: 20px;
+            color: #6ee7b7;
+            margin-bottom: 12px;
+        }
+
+        .route-path {
+            font-size: 16px;
+            color: #d1fae5;
+            margin-bottom: 8px;
+        }
+
+        .route-steps {
+            font-size: 14px;
+            color: #94a3b8;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Navigation fullscreen view */
+        .nav-view {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #0a0e27;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .nav-view.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .nav-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 24px 32px;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+            z-index: 1002;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #c7d2fe;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .back-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+            transform: translateX(-4px);
+        }
+
+        .step-counter {
+            font-family: 'JetBrains Mono', monospace;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 76px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(99, 102, 241, 0.1);
+            z-index: 1001;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+            background-size: 200% 100%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+            animation: shimmer 2s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Step content */
+        .step-wrapper {
+            padding: 140px 32px 160px;
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .step-visual {
+            width: 360px;
+            height: 360px;
+            margin: 0 auto 48px;
+            position: relative;
+            border-radius: 32px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .step-visual:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 40px 100px rgba(99, 102, 241, 0.3);
+        }
+
+        .step-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .step-visual:hover .step-img {
+            transform: scale(1.05);
+        }
+
+        .step-num {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5);
+            border: 4px solid #0a0e27;
+        }
+
+        .direction-arrow {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 64px;
+            height: 64px;
+            background: rgba(99, 102, 241, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(99, 102, 241, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            animation: pulse-arrow 2s infinite;
+        }
+
+        @keyframes pulse-arrow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .step-instruction {
+            font-size: 32px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 16px;
+            line-height: 1.3;
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .step-dist {
+            font-size: 20px;
+            color: #6ee7b7;
+            font-weight: 500;
+            margin-bottom: 80px;
+            font-family: 'JetBrains Mono', monospace;
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            animation-delay: 0.1s;
+            opacity: 0;
+            animation-fill-mode: forwards;
+            padding-bottom: 20px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Navigation controls */
+        .nav-controls {
+            position: fixed;
+            bottom: 40px;
+            left: 32px;
+            right: 32px;
+            display: flex;
+            gap: 16px;
+            z-index: 1001;
+            max-width: 600px;
+            margin: 0 auto;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 20px 32px;
+            border: none;
+            border-radius: 18px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+        }
+
+        .nav-prev {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #c7d2fe;
+        }
+
+        .nav-prev:hover {
+            background: rgba(99, 102, 241, 0.25);
+            transform: translateX(-4px);
+        }
+
+        .nav-next {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .nav-next:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(99, 102, 241, 0.5);
+        }
+
+        .nav-complete {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
+        }
+
+        .nav-complete:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(16, 185, 129, 0.5);
+        }
+        .loading {
+            text-align: center;
+            padding: 60px 40px;
+            display: none;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(99, 102, 241, 0.2);
+            border-top: 3px solid #6366f1;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 20px;
+            border-radius: 16px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            .card { padding: 32px 24px; }
+            h1 { font-size: 32px; }
+            .step-visual { width: 300px; height: 300px; }
+            .step-instruction { font-size: 26px; }
+            .nav-controls { 
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+                width: calc(100% - 32px);
+                max-width: 600px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="bg-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+    <div class="container">
+        <!-- Route planner -->
+        <div id="routePlanner">
+            <div class="header">
+                <div class="logo-wrapper">
+                    <div class="logo-bg">
+                        <span class="logo">🧭</span>
+                    </div>
+                </div>
+                <h1>Campus Navigator</h1>
+                <p class="subtitle">AI-powered route planning</p>
+            </div>
+            <div class="card">
+                <form id="routeForm">
+                    <div class="form-group">
+                        <label class="form-label">Map Data</label>
+                        <div class="file-zone" id="fileZone">
+                            <span class="file-icon">📁</span>
+                            <div class="file-text">Drop your GeoJSON file here</div>
+                            <div style="font-size: 13px; color: #64748b;">or click to browse</div>
+                        </div>
+                        <input type="file" id="geojsonFile" accept=".geojson,.json" style="display: none;">
+                        <div class="file-name" id="fileName"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Starting Point</label>
+                        <select id="startSelect" class="form-select" required>
+                            <option value="">Choose location</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Destination</label>
+                        <select id="endSelect" class="form-select" required>
+                            <option value="">Choose location</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="calcBtn" disabled>
+                        Calculate Route →
+                    </button>
+                </form>
+
+                <div class="route-summary" id="routeSummary"></div>
+                <button class="btn btn-success" id="navBtn">Start Navigation →</button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <div style="color: #94a3b8;">Calculating optimal route...</div>
+            </div>
+
+            <div class="error" id="error"></div>
+        </div>
+
+        <!-- Navigation view -->
+        <div class="nav-view" id="navView">
+            <div class="nav-header">
+                <button class="back-btn" id="backBtn">← Back</button>
+                <div class="step-counter" id="stepCounter">Step 1 / 1</div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+
+            <div class="step-wrapper">
+                <div class="step-visual" id="stepVisual">
+                    <div class="step-num" id="stepNum">1</div>
+                </div>
+                <div class="step-instruction" id="stepText"></div>
+                <div class="step-dist" id="stepDist"></div>
+            </div>
+
+            <div class="nav-controls" id="navControls"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentFile = null;
+        let instructions = [];
+        let step = 0;
+
+        const fileZone = document.getElementById('fileZone');
+        const fileInput = document.getElementById('geojsonFile');
+        const fileName = document.getElementById('fileName');
+        const calcBtn = document.getElementById('calcBtn');
+        const navBtn = document.getElementById('navBtn');
+        const loading = document.getElementById('loading');
+        const error = document.getElementById('error');
+        const routeSummary = document.getElementById('routeSummary');
+
+        // File upload
+        fileZone.onclick = () => fileInput.click();
+        
+        fileZone.ondragover = (e) => {
+            e.preventDefault();
+            fileZone.classList.add('dragover');
+        };
+        
+        fileZone.ondragleave = () => fileZone.classList.remove('dragover');
+        
+        fileZone.ondrop = (e) => {
+            e.preventDefault();
+            fileZone.classList.remove('dragover');
+            if (e.dataTransfer.files[0]) {
+                fileInput.files = e.dataTransfer.files;
+                handleFile(e.dataTransfer.files[0]);
+            }
+        };
+
+        fileInput.onchange = (e) => {
+            if (e.target.files[0]) handleFile(e.target.files[0]);
+        };
+
+        async function handleFile(file) {
+            fileName.textContent = `✓ ${file.name}`;
+            fileName.style.display = 'block';
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            try {
+                const res = await fetch('/upload', { method: 'POST', body: formData });
+                const data = await res.json();
+                
+                if (data.error) throw new Error(data.error);
+                
+                currentFile = data.filename;
+                calcBtn.disabled = false;
+                await loadLandmarks(data.filename);
+            } catch (err) {
+                showError('Upload failed: ' + err.message);
+            }
+        }
+
+        async function loadLandmarks(filename) {
+            try {
+                const res = await fetch(`/api/landmarks/${filename}`);
+                const landmarks = await res.json();
+                
+                const startSelect = document.getElementById('startSelect');
+                const endSelect = document.getElementById('endSelect');
+                
+                startSelect.innerHTML = '<option value="">Choose location</option>';
+                endSelect.innerHTML = '<option value="">Choose location</option>';
+                
+                landmarks.forEach(lm => {
+                    const name = lm.charAt(0).toUpperCase() + lm.slice(1);
+                    startSelect.add(new Option(name, lm));
+                    endSelect.add(new Option(name, lm));
+                });
+            } catch (err) {
+                showError('Error loading landmarks: ' + err.message);
+            }
+        }
+
+        document.getElementById('routeForm').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const start = document.getElementById('startSelect').value;
+            const end = document.getElementById('endSelect').value;
+            
+            if (!start || !end) return showError('Select both locations');
+            
+            loading.style.display = 'block';
+            error.style.display = 'none';
+            
+            try {
+                const res = await fetch(`/api/route/${currentFile}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ start, end })
+                });
+                
+                const data = await res.json();
+                loading.style.display = 'none';
+                
+                if (data.error) return showError(data.error);
+                
+                instructions = data.instructions;
+                showRouteSummary(data);
+            } catch (err) {
+                loading.style.display = 'none';
+                showError('Connection error: ' + err.message);
+            }
+        };
+
+        function showRouteSummary(data) {
+            routeSummary.innerHTML = `
+                <h3>✓ Route Calculated</h3>
+                <div class="route-path">${data.route}</div>
+                <div class="route-steps">${data.total_steps} navigation steps</div>
+            `;
+            routeSummary.classList.add('show');
+            navBtn.style.display = 'block';
+        }
+
+        navBtn.onclick = () => {
+            document.getElementById('routePlanner').style.display = 'none';
+            const navView = document.getElementById('navView');
+            navView.style.display = 'block';
+            setTimeout(() => navView.classList.add('active'), 50);
+            showStep(0);
+        };
+
+        document.getElementById('backBtn').onclick = () => {
+            document.getElementById('navView').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('navView').style.display = 'none';
+                document.getElementById('routePlanner').style.display = 'block';
+            }, 400);
+            step = 0;
+        };
+
+        function showStep(idx) {
+            step = Math.max(0, Math.min(idx, instructions.length - 1));
+            const current = instructions[step];
+            
+            document.getElementById('stepNum').textContent = step + 1;
+            document.getElementById('stepText').textContent = current.text;
+            document.getElementById('stepDist').textContent = current.distance ? 
+                `${current.distance}m ahead` : '';
+            document.getElementById('stepCounter').textContent = 
+                `Step ${step + 1} / ${instructions.length}`;
+            
+            const visual = document.getElementById('stepVisual');
+            
+            if (current.landmark && !['start', 'destination'].includes(current.landmark)) {
+                const imgUrl = `/static/images/${current.landmark}.jpg`;
+                visual.innerHTML = `
+                    <img src="${imgUrl}" alt="${current.landmark}" class="step-img" 
+                         onerror="this.parentNode.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;font-size:64px;\\'>📍</div><div class=\\'step-num\\' id=\\'stepNum\\'>${step + 1}</div>'">
+                    <div class="step-num" id="stepNum">${step + 1}</div>
+                    <div class="direction-arrow">${getArrow(current.turn_direction)}</div>
+                `;
+            } else {
+                visual.innerHTML = `
+                    <div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:64px;">${getIcon(current.type)}</div>
+                    <div class="step-num" id="stepNum">${step + 1}</div>
+                `;
+            }
+            
+            document.getElementById('progressBar').style.width = 
+                `${((step + 1) / instructions.length) * 100}%`;
+            updateControls();
+        }
+
+        function getArrow(dir) {
+            if (!dir) return '→';
+            return dir.includes('right') ? '↗' : dir.includes('left') ? '↖' : '→';
+        }
+
+        function getIcon(type) {
+            return type === 'start' ? '🚀' : type === 'destination' ? '🎯' : '📍';
+        }
+
+        function updateControls() {
+            const controls = document.getElementById('navControls');
+            let html = '';
+            
+            if (step > 0) {
+                html += `<button class="nav-btn nav-prev" onclick="showStep(${step - 1})">← Previous</button>`;
+            }
+            
+            if (step < instructions.length - 1) {
+                html += `<button class="nav-btn nav-next" onclick="showStep(${step + 1})">Next Step →</button>`;
+            } else {
+                html += `<button class="nav-btn nav-complete" onclick="complete()">Complete ✓</button>`;
+            }
+            
+            controls.innerHTML = html;
+        }
+
+        function complete() {
+            alert('🎉 Route completed successfully!');
+            document.getElementById('backBtn').click();
+        }
+
+        function showError(msg) {
+            error.textContent = '⚠ ' + msg;
+            error.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
